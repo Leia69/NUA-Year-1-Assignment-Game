@@ -30,11 +30,17 @@
     function preload ()
     {
         this.load.image('background', 'assets/Super_Mario_Clouds_High_Res.gif');
-        this.load.spritesheet('mario', 'assets/mario.png');
+        this.load.image('brick', 'assets/block_brick.png');
+        this.load.image('solidBrick', 'assets/block_solidBrick.png');
+        this.load.image('shinyBrick', 'assets/block_shinyBrick.png');
+        this.load.image('crackedBrick', 'assets/block_crackedBrick.png');
+        this.load.image('questionMark', 'assets/block_questionMark.png');
+        this.load.spritesheet('mario', 'assets/mario.png', { frameWidth: 28, frameHeight: 28 });
     }
 
     function create ()
     {
+        this.add.image(400, 300, 'background');
     }
 
     function update ()
