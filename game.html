@@ -34,6 +34,7 @@
     var frames = 0;
     var player;
     var blocks;
+    var finish;
     var animIndicator;
     var score = 0;
     var scoreText;
@@ -74,6 +75,7 @@
         this.load.image('shinyBrick', 'assets/block_shinyBrick.png');
         this.load.image('crackedBrick', 'assets/block_crackedBrick.png');
         this.load.image('questionMark', 'assets/block_questionMark.png');
+        this.load.image('finishFlag', 'assets/finishFlag.png');
         this.load.spritesheet('mario', 'assets/marioSSFixed.png', { frameWidth: 28, frameHeight: 28 });
         this.load.spritesheet('goomba', 'assets/goombaSSFixed.png', {frameWidth: 15, frameHeight: 13});
     }
@@ -84,6 +86,7 @@
         this.add.image(400, 300, 'background');
 
         blocks = this.physics.add.staticGroup();
+        finish = this.physics.add.staticGroup();
 
         for(let i = 0; i*gameScale.width < 800; i++){
             blocks.create(gameScale.width*i+(gameScale.width/2), 586, 'brick');
@@ -98,6 +101,11 @@
         for(let i = 15; i*gameScale.width < 800; i++ ){
             blocks.create(gameScale.width*i+(gameScale.width/2), config.height/4, 'brick');
         }
+        finish.create(gameScale.width*25+(gameScale.width/2), config.height/4-58, 'finishFlag')
+        //console.log('x: ' + gameScale.width*25+(gameScale.width/2));
+        //92 is height of flag and 150 is base of flag
+        //705 is x coordinate
+        
 
         player = this.physics.add.sprite(100, 450, 'mario');
         player.setCollideWorldBounds(true);
@@ -186,6 +194,20 @@
                 }
             }
         }
+        if(player.x > 704 && player.y < 150){
+            frames = 0;
+            for(let i = 0; i < maxEnemy; i++){
+                enemies[i].dead = false;
+                enemies[i].hit = false;
+                enemies[i].dir = -100;
+                enemies[i].visible = true;
+                enemies[i].setVelocityX(0);
+                enemies[i].setX(750);
+                enemies[i].setY(50);
+                player.setX(100);
+                player.setY(450);
+            }
+        }
         
         if(animIndicator == 1 && !cursors.left.isDown){
             animIndicator = 0;
@@ -201,7 +223,7 @@
 
             player.anims.play('left', true);
             animIndicator = 1;
-            console.log("Player Height: " + (player.y-572) + " Goomba Height" + (enemies[0].y-572))
+            //console.log("Player Height: " + (player.y-572) + " Goomba Height" + (enemies[0].y-572))
         }
         
         else if (cursors.right.isDown)
@@ -217,6 +239,9 @@
         if (cursors.up.isDown && player.body.touching.down)
         {
             player.setVelocityY(-330);
+        }
+        if (cursors.down.isDown){
+            //console.log(player.x);
         }
         
         if(frames <= 50 * maxEnemy){
