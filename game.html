@@ -36,6 +36,7 @@
     var blocks;
     var animIndicator;
     var score = 0;
+    var scoreText;
     var maxEnemy = 10;
     var deadEnemies = [];
     var enemies = [];
@@ -56,6 +57,7 @@
 
             this.dir = -100;
             this.dead = false;
+            this.hit = false;
         }
     }
 
@@ -153,7 +155,8 @@
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.collider(player, blocks);
-         // HERE
+         
+        scoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px', fill: '#000'});
         
     }
     
@@ -162,7 +165,7 @@
     {
         for(let i = 0; i < enemies.length; i++){
             if(!enemies[i].dead){
-                if(frames >= 12*i){
+                if(frames >= 50*i){
                     enemies[i].setVelocityX(enemies[i].dir);
                     enemies[i].anims.play('goombawalk', true);
                 }
@@ -173,6 +176,13 @@
                     player.setVelocityY(-50);
                     enemies[i].dead = true;
                     enemies[i].visible = false;
+                    score+= 10;
+                    scoreText.setText('Score: ' + score);
+                }
+                else if(player.y <= enemies[i].y && player.y >= enemies[i].y-15 && player.x >= enemies[i].x-10 && player.x <= enemies[i].x+15 && !enemies[i].hit){
+                    score-= 10;
+                    scoreText.setText('Score: ' + score);
+                    enemies[i].hit = true
                 }
             }
         }
@@ -209,7 +219,7 @@
             player.setVelocityY(-330);
         }
         
-        if(frames <= 120){
+        if(frames <= 50 * maxEnemy){
             frames++;
         }
         
