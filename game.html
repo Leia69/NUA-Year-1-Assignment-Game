@@ -196,6 +196,8 @@
         }
         if(player.x > 704 && player.y < 150){
             frames = 0;
+            score+= 100;
+            scoreText.setText('Score: ' + score);
             for(let i = 0; i < maxEnemy; i++){
                 enemies[i].dead = false;
                 enemies[i].hit = false;
